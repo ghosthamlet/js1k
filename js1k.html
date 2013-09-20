@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Canvas Test</title>
+<style type="text/css">
+    #lists {padding:20px;margin:10px;line-height:20px;height:20px}
+    #lists li{width:150px;padding:5px;cursor:pointer;float:left}
+    #lists li:hover{background-color:#EE0}
+    .year{font-weight:bold}
+    .theme{color:#F00}
+    .theme .app{color:#00F}
+    .theme .app:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+    <ul id="lists"></ul>
+<script type="text/javascript" src="js/js1k.js"></script>
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script>
+// js1k.j2013.love.autumn.init();
+
+/*
+trees:
+while(true) {
+    if(s >= 0) {
+      var w = cljs.core.get.call(null, cljs.core.get.call(null, B, s), 3);
+      if(cljs.core._EQ_.call(null, 1, cljs.core.rem.call(null, s, 2))) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineWidth = w
+      }else {
+        ctx.lineTo(x, y);
+        ctx.stroke()
+      }
+      var G__3473 = s - 1;
+      if (s > 0) {
+          var G__3474 = fx.call(null, s - 1);
+          var G__3475 = B.call(null, s - 1).call(null, 1);
+      }
+          s = G__3473;
+          x = G__3474;
+          y = G__3475;
+      continue
+    }else {
+      return null
+  }
+
+  ctx.fillText("\u2766", 600, js1k.j2013.love.model.autumn.h - 150)
+*/
+var apps = js1k.core.apps;
+function run(appPackageStr) {
+    var w = 1300, h = 700;
+    $('#canvas').remove();
+    $(document.body).append('<canvas id="canvas" width="'+w+'" height="'+h+'"></canvas>');
+
+    eachApp(apps, function(app, appPackageStr) {
+        js1k.util.stop(eval(appPackageStr));
+    });
+    eval(appPackageStr).init();
+}
+function eachApp(apps, func) {
+    for (var year in apps) {
+        if (!year) continue;
+        var years = apps[year];
+        func && func.year && func.year(year);
+        for (var theme in years) {
+            var themes = years[theme];
+            func && func.theme && func.theme(theme);
+            for (var name in themes) {
+                var app = themes[name];
+                var appPackageStr = 'js1k.' +year+'.'+theme+'.'+name;
+                func(app, appPackageStr);
+            }
+            func && func.theme && func.theme();
+        }
+        func && func.year && func.year();
+    }
+}
+function showChild(el) {
+}
+(function($) {
+    var html = [];
+    var cont = $('#lists');
+    eachApp(apps, (function() {
+        var _ = function(app, appPackageStr) {
+            html.push('<li onclick="run('+appPackageStr+')" class="app">' +app.title+ '</li>');
+        };
+        _.year = function(year) {
+            year ? html.push('<li onclick="showChild(this)" class="year">' +year+ '<ul class="child">') : html.push('</li></ul>');
+        };
+        _.theme = function(theme) {
+            theme ? html.push('<li onclick="showChild(this)" class="theme">' +theme+ '<ul class="child">') : html.push('</li></ul>');;
+        }
+        return _;
+    })());
+   cont.html(html.join(''));
+})(jQuery);
+</script>
+</body>
+</html>
+
