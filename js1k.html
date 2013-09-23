@@ -146,9 +146,12 @@ function jmenu(el) {
        cont.html(html.join(''));
        jmenu(cont);
         
-       var idx = location.href.indexOf('?pk=');
+       var loc = location.href;
+       var idx = loc.indexOf('?pk=');
        if (idx > -1) {
-           run(location.href.substr(idx + 4));
+           var tmp = loc.substr(idx + 4);
+           var e = tmp.indexOf('&');
+           run(e > -1 ? tmp.substr(0, e) : tmp);
            return;
        }
     });
