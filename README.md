@@ -1,7 +1,7 @@
 # js1k
 
 
-Great js1k.com demos port to Clojure and Clojurescript, for 2013 lisp in summer projects.
+Great http://js1k.com demos port to Clojure and Clojurescript, for 2013 lisp in summer projects.
 
 Now just has three demos, two in the love theme of 2013, another in the prelude theme of 2010,
 
@@ -16,7 +16,7 @@ and still have some problems:
 
 I am pleased to see any feedback, and new demos.
 
-Thanks for all the wanderful demos in js1k.com and their authors.
+Thanks for all the wanderful demos in http://js1k.com and their authors.
 
 ClojureScript demo:
 http://ghosthamlet.github.io/js1k
