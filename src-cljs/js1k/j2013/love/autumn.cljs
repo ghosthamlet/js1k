@@ -3,38 +3,38 @@
             [js1k.common.data :as cdata]
             [js1k.j2013.love.model.autumn :as cl]))
 
-(util/reg-app "j2013" "love" "autumn" (js-obj "title" "Autumn love"))
-
 (def LB cl/LB)
+
+(def ^:export app-cfg (js-obj "url" ""))
 
 (defn- leaves [f ctx L]
   (dotimes [s0 703]
     (let [s (- 702 s0)] 
-      (if (f (.sin js/Math (+ ((L s) 0) @cl/t)) 0) 
+      (if (f (util/usin (+ ((L s) 0) @cl/t)) 0) 
         (let [p0 ((L s) 1)
-              q0 (+ 275 (* (.cos js/Math (+ @cl/t ((L s) 0))) ((L s) 2)))
+              q0 (+ 275 (* (util/ucos (+ @cl/t ((L s) 0))) ((L s) 2)))
               u0 (* 99 (- (* @cl/t 9) (rem s 300)))
               u (* u0 (if (< 0 u0) 1 0) (if (not= 0 s) 1 0))
               q (+ q0 u)
-              p (+ p0 0.4 (* u (/ (.sin js/Math (/ u 99)) 9)))]
+              p (+ p0 0.4 (* u (/ (util/usin (/ u 99)) 9)))]
 
           (set! (.-fillStyle ctx) 
                 (str "rgba(" (cdata/rgb-color ((L s) 9)) "," 
                      (cdata/rgb-color ((L s) 10)) "," 
                      (cdata/rgb-color ((L s) 11)) "," 0.8 ")"))
           (.beginPath ctx)
-          (.moveTo ctx (+ q ((L s) 3)) (+ p (* ((L s) 4) (.cos js/Math (/ u 14)))))
-          (.lineTo ctx (+ q ((L s) 5)) (+ p (* ((L s) 6) (.cos js/Math (/ (/ u 14) 14)))))
-          (.lineTo ctx (+ q ((L s) 7)) (+ p (* ((L s) 8) (.cos js/Math (/ (/ (/ u 14) 14) 14)))))
+          (.moveTo ctx (+ q ((L s) 3)) (+ p (* ((L s) 4) (util/ucos (/ u 14)))))
+          (.lineTo ctx (+ q ((L s) 5)) (+ p (* ((L s) 6) (util/ucos (/ (/ u 14) 14)))))
+          (.lineTo ctx (+ q ((L s) 7)) (+ p (* ((L s) 8) (util/ucos (/ (/ (/ u 14) 14) 14)))))
           (.closePath ctx)
           (.fill ctx))))))
 
 (defn- trees [ctx B]
-  (let [fx (fn [i] (+ 275 (* (.cos js/Math (+ ((B i) 0) @cl/t)) ((B i) 2))))] 
+  (let [fx (fn [i] (+ 275 (* (util/ucos (+ ((B i) 0) @cl/t)) ((B i) 2))))] 
     (loop [s 241 
            x (fx s)
            y ((B s) 1)]
-      (if (> s 0)
+      (if (>= s 0)
         (let [w (get (get B s) 3)]
           (if (= 1 (rem s 2))
             (do
@@ -42,10 +42,9 @@
               (.moveTo ctx x y)
               (set! (.-lineWidth ctx) w))
             (do 
-              ; (.strokeStyle ctx "#0F0")
               (.lineTo ctx x y)
               (.stroke ctx)))
-          (recur (dec s) (fx (dec s)) ((B (dec s)) 1)))))))
+          (recur (dec s) (and (> s 0) (fx (dec s))) (and (> s 0) ((B (dec s)) 1))))))))
 
 (defn- reflect [ctx]
   (loop [y 119]
@@ -55,15 +54,35 @@
                        (.getImageData 
                          ctx 0 
                          (int (+ (- cl/h 120 y) 
-                                 (.abs js/Math (* (.sin js/Math (+ (* @cl/t 9) (/ y 8))) (/ y 5))))) cl/w 1)
-                       (.abs js/Math (int (* (.sin js/Math (+ (* @cl/t 9) (/ y 4))) (/ y 9))))
+                                 (util/uabs (* (util/usin (+ (* @cl/t 9) (/ y 8))) (/ y 5))))) cl/w 1)
+                       (util/uabs (int (* (util/usin (+ (* @cl/t 9) (/ y 4))) (/ y 9))))
                        (+ (- cl/h 120) y))
         (recur (dec y))))))
 
 (defn- text [ctx]
   (set! (.-fillStyle ctx) "#e65")
   (set! (.-font ctx) "120px x")
-  (.fillText ctx "Autumn Tree" 300 (- cl/h 150)))
+  (.fillText ctx "\u2766" 600 (- cl/h 150)))
+
+(defn- man [ctx]
+  (let [w 1
+        ax 353
+        ay 460]
+    (util/line ctx ax ay (+ ax 2) (+ ay 5) :w w)
+    (util/line ctx (+ ax 2) (+ ay 5) (+ ax 2) (+ ay 5 10) :w w)
+    (util/line ctx (+ ax 2) (+ ay 5) (- (+ ax 2) 5) (+ ay 5 11) :w w)
+    (util/line ctx (+ ax 2) (+ ay 5) (+ ax 2 5) (+ ay 5 11) :w w)
+    (util/line ctx (+ ax 2) (+ ay 5 10) (- (+ ax 2) 5) (+ ay 5 10 11) :w w)
+    (util/line ctx (+ ax 2) (+ ay 5 10) (+ ax 2 5) (+ ay 5 10 11) :w w)
+    
+    (util/line ctx 330 462 327 467 :w w)
+    (util/line ctx 327 467 329 475 :w w)
+    (util/line ctx 327 467 322 472 :w w)
+    (util/line ctx 330 465 333 476 :w w)
+    (util/line ctx 329 475 322 470 :w w)
+    (util/line ctx 329 475 333 470 :w w)
+    (util/line ctx 322 470 325 478 :w w)
+    (util/line ctx 333 470 333 478 :w w)))
 
 (defn eloop [ctx]
   (swap! cl/t #(+ 0.03 %))
@@ -78,6 +97,7 @@
   (leaves < ctx (first LB))
   (trees ctx (second LB))
   (leaves > ctx (first LB))
+  (man ctx)
   (reflect ctx)
 
   (set! (.-fillStyle ctx) "rgba(0, 0, 99, 0.1)")
@@ -87,5 +107,5 @@
   (util/init eloop 50))
 
 (defn reset []
-  (swap! cl/t (fn [_] cl/orig-t))
+  (reset! cl/t cl/orig-t)
   (def LB (cl/create-lb)))

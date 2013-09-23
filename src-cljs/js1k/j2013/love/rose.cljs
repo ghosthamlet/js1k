@@ -3,7 +3,7 @@
             [js1k.common.data :as cdata]
             [js1k.j2013.love.model.rose :as cl]))
 
-(util/reg-app "j2013" "love" "rose" (js-obj "title" "Rose"))
+(def ^:export app-cfg (js-obj "url" ""))
 
 (defn rose [ctx]
   ; animation can use 90000

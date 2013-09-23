@@ -8,6 +8,7 @@
 (defn usin [x] (.sin js/Math x))
 (defn ucos [x] (.cos js/Math x))
 (defn upow [x y] (.pow js/Math x y))
+(defn uabs [x] (.abs js/Math x))
 
 (defn log [& items]
   (.log js/console (apply str (interpose ", " items))))
@@ -24,7 +25,18 @@
   (js/clearInterval @state)
   (app/reset))
 
+(defn line [ctx x y tx ty & {:keys [w style]}]
+  (.beginPath ctx)
+  (.moveTo ctx x y)
+  (.lineTo ctx tx ty)
+  (and w (set! (.-lineWidth ctx) w))
+  (and style (.strokeStyle ctx style))
+  (.stroke ctx))
+
+; deprecated
+; use js->clj, then map and deep-merge, then clj->js
 (defn reg-app 
+  "(util/reg-app \"j2013\" \"love\" \"autumn\" (js-obj \"title\" \"Autumn love\"))"
   [year theme name ^js-obj attr]
   (let [old-themes (aget core/apps year)
         new-themes (if (nil? old-themes) 
@@ -44,3 +56,5 @@
 ;  "in javascript: apps.state is the raw value"
 ;  (swap! core/apps (cdata/deep-merge @core/apps app)))
 
+; if x is nil, don't exec expr
+; (defmacro exec?! [expr x])

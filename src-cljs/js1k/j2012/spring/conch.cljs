@@ -2,7 +2,7 @@
   (:require [js1k.util :as util]
             [js1k.j2012.spring.model.conch :as cl]))
 
-(util/reg-app "j2012" "spring" "conch" (js-obj "title" "3D conch"))
+(def ^:export app-cfg (js-obj "title" "3D conch" "url" "http://js1k.com/2010-first/demo/666"))
 
 (defn conch [ctx]
   (swap! cl/m #(+ @cl/n %))

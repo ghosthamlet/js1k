@@ -2,55 +2,66 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Canvas Test</title>
+<title>JS1K->Clojure(Script)</title>
 <style type="text/css">
-    #lists {padding:20px;margin:10px;line-height:20px;height:20px}
-    #lists li{width:150px;padding:5px;cursor:pointer;float:left}
-    #lists li:hover{background-color:#EE0}
-    .year{font-weight:bold}
-    .theme{color:#F00}
-    .theme .app{color:#00F}
-    .theme .app:hover{text-decoration:underline}
+#content {height:30px}
+#info {width:300px;padding:5px 0 0 10px;float:left}
+#menu {width:600px;float:left}
+/* menu style and javascript from Joomla! */
+
+#menu, #menu ul, #menu li { margin: 0; padding: 0; border: 0 none; }
+
+#menu       { position:relative; z-index: 100;}
+#menu li    { float:left;  position:relative; list-style: none; display: inline;}
+#menu li a  { display:block; white-space: nowrap;  }
+#menu li li { /*width: 100%;*/ clear: both;  /*FF 1.0.7 needs this */  }
+#menu li ul { visibility: hidden; position:absolute; }
+
+#menu li li ul {  top: 0; left: 0; }
+
+#menu li.hover ul               {  visibility: visible; }
+#menu li.hover ul li ul 		  {  visibility: hidden;  }
+#menu li.hover li.hover ul      {  visibility: visible;  left: 100%; }
+
+/* ---- Menu layout -------------------------- */
+
+#menu li { border: 1px solid #d8d8d8; }
+#menu li li { border: 0;}
+
+#menu ul    { border: 0.1em solid #ccc; background: #f6f6f6 url(resource/bg-menu.gif) repeat-y left;}
+#menu ul li.node { background: transparent url(resource/j_arrow.png) no-repeat right 50%; }
+#menu ul li.separator { background: #DDE1E6 url(resource/bg-menu.gif);  height: 1px;  }
+
+#menu a, #menu div { padding: 0.35em 1em 0.35em; margin: 0 1px 0 1px; color: #333333; line-height: 1.6em; vertical-align: middle; font-size: 11px; font-weight: bold; text-decoration: none; cursor: default; background-repeat: no-repeat; background-position: left 50% } 
+
+#menu ul a { font-size: 11px; font-weight: normal; padding-left: 25px; padding-right: 20px; line-height: 1.2em; }
+
+/* 1 level - hover */
+#menu li.hover a {  background-color: #E7EDDF; border: 1px solid #6D9D2E;margin: 0; }
+/* 2 level - normal */
+#menu li.hover li a { background-color: transparent; border: 0 none;   margin: 2px;  }
+/* 2 level - hover */
+#menu li.hover li.hover a { background-color: #E7EDDF; border: 1px solid #6D9D2E;  margin: 1px;}
+/* 3 level - normal */
+#menu li.hover li.hover li a { background-color: transparent; border: 0 none;   margin: 2px;  }
+/* 3 level - hover */
+#menu li.hover li.hover li a:hover { background-color: #E7EDDF; border: 1px solid #6D9D2E;  margin: 1px}
 </style>
 </head>
+
 <body>
-    <ul id="lists"></ul>
+<div id="content">
+    <div id="info">JS1K-&gt;Clojure(Script) (<a href="http://js1k.com" target="_blank">js1k.com</a>)</div>
+    <ul id="menu"></ul>
+</div>
 <script type="text/javascript" src="js/js1k.js"></script>
 <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
 <script>
-// js1k.j2013.love.autumn.init();
+var apps = {};
+// var apps = js1k.core.apps;
 
-/*
-trees:
-while(true) {
-    if(s >= 0) {
-      var w = cljs.core.get.call(null, cljs.core.get.call(null, B, s), 3);
-      if(cljs.core._EQ_.call(null, 1, cljs.core.rem.call(null, s, 2))) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineWidth = w
-      }else {
-        ctx.lineTo(x, y);
-        ctx.stroke()
-      }
-      var G__3473 = s - 1;
-      if (s > 0) {
-          var G__3474 = fx.call(null, s - 1);
-          var G__3475 = B.call(null, s - 1).call(null, 1);
-      }
-          s = G__3473;
-          x = G__3474;
-          y = G__3475;
-      continue
-    }else {
-      return null
-  }
-
-  ctx.fillText("\u2766", 600, js1k.j2013.love.model.autumn.h - 150)
-*/
-var apps = js1k.core.apps;
 function run(appPackageStr) {
-    var w = 1300, h = 700;
+    var w = 1300, h = 600;
     $('#canvas').remove();
     $(document.body).append('<canvas id="canvas" width="'+w+'" height="'+h+'"></canvas>');
 
@@ -69,7 +80,7 @@ function eachApp(apps, func) {
             func && func.theme && func.theme(theme);
             for (var name in themes) {
                 var app = themes[name];
-                var appPackageStr = 'js1k.' +year+'.'+theme+'.'+name;
+                var appPackageStr = app.pk; // 'js1k.' +year+'.'+theme+'.'+name;
                 func(app, appPackageStr);
             }
             func && func.theme && func.theme();
@@ -77,24 +88,64 @@ function eachApp(apps, func) {
         func && func.year && func.year();
     }
 }
-function showChild(el) {
+function jmenu(el) {
+    var elements = $('li', el);
+    var nested = null;
+    elements.each(function(){
+        var element = $(this);
+
+        element.mouseover(function(){ $(this).addClass('hover'); })
+            .mouseout(function(){ $(this).removeClass('hover'); });
+
+        //find nested UL
+        nested = $('ul', element);
+        if(!nested.length) {
+            return;
+        }
+
+        //declare width
+        var offsetWidth  = 0;
+        var cn=nested[0].childNodes;
+
+        //find longest child
+        for (var k=0, len=cn.length; k < len; k++) {
+                var node = cn[k];
+                if (node.nodeName == "LI")
+                        offsetWidth = (offsetWidth >= node.offsetWidth) ? offsetWidth :  node.offsetWidth;
+        }
+
+        //match longest child
+        for (l=0; l < cn.length; l++) {
+                var node = cn[l]
+                if (node.nodeName == "LI") {
+                        $(node).css('width', offsetWidth+'px');
+                }
+        }
+
+        nested.css('width', offsetWidth+'px');
+    });
 }
 (function($) {
     var html = [];
-    var cont = $('#lists');
-    eachApp(apps, (function() {
-        var _ = function(app, appPackageStr) {
-            html.push('<li onclick="run('+appPackageStr+')" class="app">' +app.title+ '</li>');
-        };
-        _.year = function(year) {
-            year ? html.push('<li onclick="showChild(this)" class="year">' +year+ '<ul class="child">') : html.push('</li></ul>');
-        };
-        _.theme = function(theme) {
-            theme ? html.push('<li onclick="showChild(this)" class="theme">' +theme+ '<ul class="child">') : html.push('</li></ul>');;
-        }
-        return _;
-    })());
-   cont.html(html.join(''));
+    var cont = $('#menu');
+    $.getJSON('resource/apps.json', function(res) {
+        apps = res[0];
+        eachApp(apps, (function() {
+            var _ = function(app, appPackageStr) {
+                html.push('<li onclick="run('+appPackageStr+')" class="app"><a>' +app.title+ '</a></li>');
+            };
+            _.year = function(year) {
+                year ? html.push('<li class="year"><a>' +year+ '</a><ul class="child">') : html.push('</li></ul>');
+            };
+            _.theme = function(theme) {
+                theme ? html.push('<li class="theme"><a>' +theme+ '</a><ul class="child">') : html.push('</li></ul>');;
+            }
+            return _;
+        })());
+
+       cont.html(html.join(''));
+       jmenu(cont);
+    });
 })(jQuery);
 </script>
 </body>

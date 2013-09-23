@@ -7,8 +7,6 @@
         :reload)
   (:import java.awt.Font))
 
-; http://js1k.com/2010-first/demo/666
-
 (defn conch [c g]
   (swap! m #(+ @n %))
   (if (or (> @m 254) (< @m 1)) (swap! n #(- %)))
@@ -25,15 +23,8 @@
         (conch c g))
   (re-calc))
 
-(def ui
-  (frame 
-    :width w
-    :height h
-    :title "Conch"
-    :content (border-panel
-               :center (canvas :id :canvas :paint paint))))
-
 (defn add-behaviors [root]
+  "http://js1k.com/2010-first/demo/666"
   (let [c (select root [:#canvas])
         tt (timer (fn [_] (repaint! c))
                   :delay 10
@@ -42,8 +33,4 @@
     ; Clean up timer on close (useful in repl)
     (listen root :window-closing (fn [_] (.stop tt)))
     root))
-    
-(defexample []
-  (-> ui add-behaviors))
 
-(-main)

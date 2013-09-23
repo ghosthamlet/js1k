@@ -1,6 +1,6 @@
 (ns js1k.j2013.love.model.autumn)
 
-(def w 1000)
+(def w 1300)
 (def h 600)
 
 (def t (atom -0.4))

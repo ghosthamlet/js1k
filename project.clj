@@ -11,6 +11,7 @@
 
             ;; lein uberjar
             :source-paths ["src"]
+            :resource-paths ["resource"]
             :main js1k.core
             ;; cljsbuild does not like cljs files being in the root source folder
             ;; lein cljsbuild once

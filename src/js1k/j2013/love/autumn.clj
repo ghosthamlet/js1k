@@ -23,10 +23,8 @@
                       (move-to (+ q ((L s) 3)) (+ p (* ((L s) 4) (ucos (/ u 14)))))
                       (line-to (+ q ((L s) 5)) (+ p (* ((L s) 6) (ucos (/ (/ u 14) 14)))))
                       (line-to (+ q ((L s) 7)) (+ p (* ((L s) 8) (ucos (/ (/ (/ u 14) 14) 14))))))
-                (style :background ;"#00FF00"
-                       (color (cdata/rgb-color ((L s) 9)) (cdata/rgb-color ((L s) 10)) (cdata/rgb-color ((L s) 11)) 220)
-                       ;(color (bit-not (bit-not (int ((L s) 9)))) (bit-not (bit-not (int ((L s) 10)))) (bit-not (bit-not (int ((L s) 11)))) 0.8)
-                       )))))))
+                (style :background
+                       (color (cdata/rgb-color ((L s) 9)) (cdata/rgb-color ((L s) 10)) (cdata/rgb-color ((L s) 11)) 220))))))))
 
 (defn- trees [c g B]
   (let [fx (fn [i] (+ 275 (* (ucos (+ ((B i) 0) @t)) ((B i) 2))))] 
@@ -37,7 +35,7 @@
            ty y
            w (get (get B s) 3)
            tw w]
-    (if (> s 0)
+    (if (>= s 0)
       (do
         (if (= 1 (rem s 2))
           (draw g
@@ -50,11 +48,11 @@
                     (move-to x y) 
                     (line-to tx ty))
               (style :foreground "#000000" :background "#0000FF" :stroke w :cap :round)))
-        (recur (dec s) tx ty (fx (dec s)) ((B (dec s)) 1) tw (get (get B (dec s)) 3)))))))
+        (recur (dec s) tx ty (and (> s 0) (fx (dec s))) (and (> s 0) ((B (dec s)) 1)) tw (and (> s 0) (get (get B (dec s)) 3))))))))
 
 (def bi-orig (buffered-image w h))
 
-(defn reflect [c g bi-orig]
+(defn- reflect [c g bi-orig]
   (let [bi-dest (buffered-image w h)
         in-x #(if (< 0 % 100) % 0)
         in-y #(if (< 0 % 100) % 0)]
@@ -75,9 +73,9 @@
 (defn paint [c g]
   (do
     (.setFont g (Font. "Default" Font/BOLD 120))
-    (.drawString g "@" 500 (- h 100))
+    (.drawString g "\u2766" 500 (- h 100))
+    ; sky
     (draw g
-          ; sky
           (rect 0 0 w h) 
           (style :background 
                  (radial-gradient 
@@ -87,26 +85,18 @@
                    :fractions [0.06 0.07 0.2 1] 
                    :colors ["#fda" "#fc4" "#e65" "#326"])))
     (push g
-          (leaves < c g (-LB 0))
-          (trees c g (-LB 1))
-          (leaves > c g (-LB 0))
+          (leaves < c g (LB 0))
+          (trees c g (LB 1))
+          (leaves > c g (LB 0))
           ;(.drawImage g (reflect c g bi-orig) nil 0 0)
           (draw g 
                 (rect 0 (- h 120) w 120)
-                (style :background (color 0 0 99 90))))))
-
-(def ui
-  (frame 
-    :width w
-    :height h
-    :title ""
-    :content (border-panel
-               :center (canvas :id :canvas :paint paint))))
+                (style :background (color 60 80 00 255))))))
 
 (defn add-behaviors [root]
   (let [c (select root [:#canvas])
         tt (timer (fn [_]
-                    (swap! t #(+ 0.03 %))
+                    (swap! t #(+ 0.02 %))
                     (repaint! c))
                   :delay 0
                   :start? true)]
@@ -115,8 +105,8 @@
     (listen root :window-closing (fn [_] (.stop tt)))
     root))
     
-(defexample []
-  (-> ui add-behaviors))
+; (defexample []
+;  (-> ui add-behaviors))
 
 ; (defn -main [& args]
 ;   (invoke-now
@@ -124,6 +114,6 @@
 ;       pack!
 ;       show!)))
 ; 
-(-main)
+; (-main)
 ; close in repl 
 ; (.dispose js1k.core/ui)
