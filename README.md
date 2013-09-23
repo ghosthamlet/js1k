@@ -19,9 +19,24 @@ I am pleased to see any feedback, and new demos.
 Thanks for all the wanderful demos in http://js1k.com and their authors.
 
 ClojureScript demo:
-http://ghosthamlet.github.io/js1k
 
-Clojure demo has a standalone jar to be download.
+![Autumn](https://raw.github.com/ghosthamlet/js1k/master/resource/a.jpg)
+
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.autumn
+
+![Rose](https://raw.github.com/ghosthamlet/js1k/master/resource/r.jpg)
+
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.rose
+
+![Conch](https://raw.github.com/ghosthamlet/js1k/master/resource/c.gif)
+
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2012.spring.conch
+
+
+
+Clojure demo has a standalone jar to be download:
+
+https://github.com/ghosthamlet/js1k/raw/master/js1k-0.1.0-SNAPSHOT-standalone.jar
 
 
 ## Usage
