@@ -26,15 +26,15 @@ ClojureScript demo:
 
 ![Autumn](https://raw.github.com/ghosthamlet/js1k/master/resource/a.jpg)
 
-http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.autumn
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.autumn&t=1
 
 ![Rose](https://raw.github.com/ghosthamlet/js1k/master/resource/r.jpg)
 
-http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.rose
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2013.love.rose&t=1
 
 ![Conch](https://raw.github.com/ghosthamlet/js1k/master/resource/c.gif)
 
-http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2012.spring.conch
+http://ghosthamlet.github.io/js1k/js1k.html?pk=js1k.j2012.spring.conch&t=1
 
 
 
