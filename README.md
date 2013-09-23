@@ -13,12 +13,16 @@ and still have some problems:
 1. I haven't found an easy way to create water reflection in Clojure version
 2. Clojurescript version has some performance problems, but some times it runs pretty smooth
 3. The rose demo of All version have no 3D animation
+4. Clojurescript version can't run in Chrome browser in local, can't read the apps.json
+5. More code to reuse.
 
 I am pleased to see any feedback, and new demos.
 
 Thanks for all the wanderful demos in http://js1k.com and their authors.
 
 ClojureScript demo:
+
+(click the link, not image, how to add link to image here?)
 
 ![Autumn](https://raw.github.com/ghosthamlet/js1k/master/resource/a.jpg)
 
