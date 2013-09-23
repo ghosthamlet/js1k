@@ -1,6 +1,8 @@
 # js1k
 
-A Clojure library designed to ... well, that part is up to you.
+
+http://ghosthamlet.github.io/js1k
+
 
 ## Usage
 
