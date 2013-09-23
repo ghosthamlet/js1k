@@ -145,6 +145,12 @@ function jmenu(el) {
 
        cont.html(html.join(''));
        jmenu(cont);
+       
+       var idx = location.href.indexOf('?pk=');
+       if (idx > -1) {
+           run(location.href.substr(idx + 4));
+           return;
+       }
     });
 })(jQuery);
 </script>
