@@ -1,7 +1,10 @@
 # js1k
 
 
+ClojureScript demo:
 http://ghosthamlet.github.io/js1k
+
+Clojure demo has a standalone jar to be download.
 
 
 ## Usage
